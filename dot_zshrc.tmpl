@@ -1,0 +1,31 @@
+# --- Shared ---
+export PATH="$PATH:$HOME/go/bin"
+
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+# Powerlevel10k instant prompt (keep near top)
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# --- OS-specific plugin locations ---
+{{ if eq .chezmoi.os "darwin" }}
+# macOS (Homebrew)
+[[ -r /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]] && \
+  source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
+[[ -r /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme ]] && \
+  source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+{{ else }}
+# Linux (adjust paths to how you installed them)
+[[ -r /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]] && \
+  source /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
+[[ -r /usr/share/powerlevel10k/powerlevel10k.zsh-theme ]] && \
+  source /usr/share/powerlevel10k/powerlevel10k.zsh-theme
+{{ end }}
+
+# Load your personal P10k config if present
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
