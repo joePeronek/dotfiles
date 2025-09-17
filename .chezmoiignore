@@ -1,0 +1,22 @@
+# mac metadata
+**/.DS_Store
+*.localized
+
+# caches / state you likely don’t want in git
+.zsh_history
+.python_history
+.viminfo
+.zcompdump*
+
+# mac-only apps (skip on Linux)
+{{ if ne .chezmoi.os "darwin" }}
+.config/ghostty/**
+.config/iterm2/**
+.config/raycast/**
+.config/aerospace/**
+{{ end }}
+
+# linux-only apps you don't use on mac
+{{ if eq .chezmoi.os "darwin" }}
+{{ end }}
+

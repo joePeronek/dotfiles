@@ -1,0 +1,17 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+	name = Joe Peronek
+	email = joe@peronek.com
+[core]
+	excludesfile = /Users/joeperonek/.gitignore_global
+[init]
+	defaultBranch = main 
+[pull]
+	rebase = true
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
