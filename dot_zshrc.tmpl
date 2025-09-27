@@ -35,8 +35,23 @@ if command -v brew >/dev/null 2>&1; then
 fi
 {{ end }}
 
-# Load your personal P10k config if present
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+# Powerlevel10k (safe, cross-platform)
+if [ -r "$HOME/.p10k.zsh" ]; then
+  source "$HOME/.p10k.zsh"
+fi
+if [ -r "$HOME/.p10k.zshexport" ]; then
+  source "$HOME/.p10k.zshexport"
+fi
+{{ if eq .chezmoi.os "darwin" }}
+# macOS: If neither file exists, run: `p10k configure` to create ~/.p10k.zsh.
+{{ else if eq .chezmoi.os "linux" }}
+# Linux: If neither file exists, run: `p10k configure` to create ~/.p10k.zsh.
+{{ else }}
+# If neither file exists, run: `p10k configure` to create ~/.p10k.zsh.
+{{ end }}
+if [ ! -r "$HOME/.p10k.zsh" ] && [ ! -r "$HOME/.p10k.zshexport" ]; then
+  source "$HOME/.p10k.fallback.zsh" 2>/dev/null || true
+fi
 
 {{- if eq .chezmoi.os "linux" -}}
 export PATH="$HOME/.local/bin:$PATH"
