@@ -29,32 +29,34 @@ log "Detected $MANAGER; ensuring baseline tooling is present."
 
 case "$MANAGER" in
   apt)
-    PACKAGES="\
-build-essential\n\
-curl\n\
-git\n\
-ripgrep\n\
-fzf\n\
-tmux\n\
-neovim\n\
-python3\n\
-python3-venv\n\
-python3-pip\n\
-golang-go\n\
-cmake\n\
-pkg-config\n\
-meson\n\
-autoconf\n\
-automake\n\
-libtool\n\
-wget\n\
-unzip\n\
-htop\n\
-chezmoi\n\
-zsh\n\
-zsh-autosuggestions\n\
-zsh-theme-powerlevel10k\n\
-fonts-jetbrains-mono"
+    PACKAGES=$(cat <<'EOF'
+build-essential
+curl
+git
+ripgrep
+fzf
+tmux
+neovim
+python3
+python3-venv
+python3-pip
+golang-go
+cmake
+pkg-config
+meson
+autoconf
+automake
+libtool
+wget
+unzip
+htop
+chezmoi
+zsh
+zsh-autosuggestions
+zsh-theme-powerlevel10k
+fonts-jetbrains-mono
+EOF
+    )
 
     $SUDO apt-get update
 
@@ -68,34 +70,36 @@ fonts-jetbrains-mono"
     done
     ;;
   dnf)
-    PACKAGES="\
-gcc\n\
-gcc-c++\n\
-make\n\
-curl\n\
-git\n\
-ripgrep\n\
-fzf\n\
-tmux\n\
-neovim\n\
-python3\n\
-python3-pip\n\
-python3-virtualenv\n\
-golang\n\
-cmake\n\
-meson\n\
-autoconf\n\
-automake\n\
-libtool\n\
-pkgconf-pkg-config\n\
-wget\n\
-unzip\n\
-htop\n\
-chezmoi\n\
-zsh\n\
-zsh-autosuggestions\n\
-powerlevel10k\n\
-jetbrains-mono-fonts"
+    PACKAGES=$(cat <<'EOF'
+gcc
+gcc-c++
+make
+curl
+git
+ripgrep
+fzf
+tmux
+neovim
+python3
+python3-pip
+python3-virtualenv
+golang
+cmake
+meson
+autoconf
+automake
+libtool
+pkgconf-pkg-config
+wget
+unzip
+htop
+chezmoi
+zsh
+zsh-autosuggestions
+powerlevel10k
+jetbrains-mono-fonts
+EOF
+    )
 
     $SUDO dnf -y makecache
 
