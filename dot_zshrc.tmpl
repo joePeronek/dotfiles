@@ -12,18 +12,50 @@ fi
 # --- OS-specific plugin locations ---
 {{ if eq .chezmoi.os "darwin" }}
 # macOS (Homebrew)
-[[ -r /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]] && \
-  source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+if command -v brew >/dev/null 2>&1; then
+  HOMEBREW_PREFIX="$(brew --prefix)"
 
-[[ -r /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme ]] && \
-  source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+  for plugin_path in \
+    "$HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh" \
+    "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"; do
+    if [[ -r "$plugin_path" ]]; then
+      source "$plugin_path"
+      break
+    fi
+  done
+
+  for theme_path in \
+    "$HOMEBREW_PREFIX/share/powerlevel10k/powerlevel10k.zsh-theme" \
+    "$HOMEBREW_PREFIX/opt/powerlevel10k/share/powerlevel10k/powerlevel10k.zsh-theme"; do
+    if [[ -r "$theme_path" ]]; then
+      source "$theme_path"
+      break
+    fi
+  done
+fi
 {{ else }}
-# Linux (adjust paths to how you installed them)
-[[ -r /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]] && \
-  source /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# Linux (auto-detect typical system locations)
+for plugin_path in \
+  /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh \
+  /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh \
+  /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
+  /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh; do
+  if [[ -r "$plugin_path" ]]; then
+    source "$plugin_path"
+    break
+  fi
+done
 
-[[ -r /usr/share/powerlevel10k/powerlevel10k.zsh-theme ]] && \
-  source /usr/share/powerlevel10k/powerlevel10k.zsh-theme
+for theme_path in \
+  /usr/share/powerlevel10k/powerlevel10k.zsh-theme \
+  /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
+  /usr/share/zsh/themes/powerlevel10k.zsh-theme \
+  "$HOME/.local/share/powerlevel10k/powerlevel10k.zsh-theme"; do
+  if [[ -r "$theme_path" ]]; then
+    source "$theme_path"
+    break
+  fi
+done
 {{ end }}
 
 # Load your personal P10k config if present

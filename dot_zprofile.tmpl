@@ -1,0 +1,27 @@
+# Common PATH adjustments for user-level installs first.
+PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+
+{{ if eq .chezmoi.os "darwin" }}
+# Prefer the Python 3.12 framework installed alongside Homebrew tools.
+PATH="/Library/Frameworks/Python.framework/Versions/3.12/bin:${PATH}"
+{{ else if eq .chezmoi.os "linux" }}
+# Ensure locally compiled binaries are preferred on Linux.
+if [ -d /usr/local/bin ]; then
+  PATH="/usr/local/bin:${PATH}"
+fi
+if [ -d /usr/local/sbin ]; then
+  PATH="/usr/local/sbin:${PATH}"
+fi
+if [ -d /snap/bin ]; then
+  PATH="/snap/bin:${PATH}"
+fi
+{{ end }}
+
+export PATH
+
+{{ if eq .chezmoi.os "darwin" }}
+# Load the Apple Silicon Homebrew environment when available.
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+{{ end }}
