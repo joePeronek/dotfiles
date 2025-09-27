@@ -33,31 +33,22 @@ if command -v brew >/dev/null 2>&1; then
     fi
   done
 fi
-{{ else }}
-# Linux (auto-detect typical system locations)
-for plugin_path in \
-  /usr/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh \
-  /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh \
-  /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh \
-  /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh; do
-  if [[ -r "$plugin_path" ]]; then
-    source "$plugin_path"
-    break
-  fi
-done
-
-for theme_path in \
-  /usr/share/powerlevel10k/powerlevel10k.zsh-theme \
-  /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme \
-  /usr/share/zsh/themes/powerlevel10k.zsh-theme \
-  "$HOME/.local/share/powerlevel10k/powerlevel10k.zsh-theme"; do
-  if [[ -r "$theme_path" ]]; then
-    source "$theme_path"
-    break
-  fi
-done
 {{ end }}
 
 # Load your personal P10k config if present
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
+{{- if eq .chezmoi.os "linux" -}}
+export PATH="$HOME/.local/bin:$PATH"
+setopt HIST_IGNORE_DUPS SHARE_HISTORY
+autoload -Uz compinit && compinit -i
+
+# fzf (guarded)
+if [ -f /usr/share/fzf/shell/key-bindings.zsh ]; then source /usr/share/fzf/shell/key-bindings.zsh; fi
+
+# zsh-autosuggestions (guarded)
+if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh; fi
+
+# powerlevel10k (guarded)
+if [ -f /usr/share/powerlevel10k/powerlevel10k.zsh-theme ]; then source /usr/share/powerlevel10k/powerlevel10k.zsh-theme; fi
+{{- end -}}
