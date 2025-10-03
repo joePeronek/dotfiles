@@ -52,33 +52,35 @@ fi
 # If neither file exists, run: `p10k configure` to create ~/.p10k.zsh.
 {{ end }}
 
+# === eza aliases ===
+if command -v eza >/dev/null 2>&1; then
+
+# replace ls with eza
+alias ls='eza --icons --group-directories-first'
+
+# industry-standard shortcuts
+alias ll='eza -lh --icons --group-directories-first'   # long + human
+alias la='eza -a --icons --group-directories-first'    # all files
+alias lla='eza -lha --icons --group-directories-first' # long + all
+alias lt='eza --tree --icons --group-directories-first' # tree view
+
+# extras
+alias lg='eza -lh --git --icons --group-directories-first' # git status
+alias lS='eza -lh --sort=size --icons'                     # sort by size
+alias lt1='eza --tree --level=1 --icons'                   # shallow tree
+else
+# fallback: colorized ls
+alias ls='ls --color=auto'
+alias ll='ls -lh'
+alias la='ls -A'
+alias lla='ls -lha'
+fi
+
 {{- if eq .chezmoi.os "linux" -}}
 export PATH="$HOME/.local/bin:$PATH"
 setopt HIST_IGNORE_DUPS SHARE_HISTORY
 autoload -Uz compinit && compinit -i
 
-# === eza aliases ===
-if command -v eza >/dev/null 2>&1; then
-  # replace ls with eza
-  alias ls='eza --icons --group-directories-first'
-
-  # industry-standard shortcuts
-  alias ll='eza -lh --icons --group-directories-first'   # long + human
-  alias la='eza -a --icons --group-directories-first'    # all files
-  alias lla='eza -lha --icons --group-directories-first' # long + all
-  alias lt='eza --tree --icons --group-directories-first' # tree view
-
-  # extras
-  alias lg='eza -lh --git --icons --group-directories-first' # git status
-  alias lS='eza -lh --sort=size --icons'                     # sort by size
-  alias lt1='eza --tree --level=1 --icons'                   # shallow tree
-else
-  # fallback: colorized ls
-  alias ls='ls --color=auto'
-  alias ll='ls -lh'
-  alias la='ls -A'
-  alias lla='ls -lha'
-fi
 
 # fzf (guarded)
 if [ -f /usr/share/fzf/shell/key-bindings.zsh ]; then source /usr/share/fzf/shell/key-bindings.zsh; fi
