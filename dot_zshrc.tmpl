@@ -76,6 +76,9 @@ alias la='ls -A'
 alias lla='ls -lha'
 fi
 
+# === other aliases ===
+alias j='cd "$(fd -t d | fzf)"'
+
 {{- if eq .chezmoi.os "linux" -}}
 export PATH="$HOME/.local/bin:$PATH"
 setopt HIST_IGNORE_DUPS SHARE_HISTORY
